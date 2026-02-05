@@ -1,1 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI-Based Fitness Level Predictor</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            background: linear-gradient(135deg, #f4f7fb, #eef2f7);
+            font-family: "Segoe UI", sans-serif;
+        }
+        .card {
+            border-radius: 16px;
+            border: none;
+        }
+        section {
+            padding-top: 80px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- 🔷 NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="#home">AI Fitness Predictor</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#how">How It Works</a></li>
+                <li class="nav-item"><a class="nav-link" href="#predict">Predict Fitness</a></li>
+                <li class="nav-item"><a class="nav-link" href="#result">Result</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5 pt-4">
+
+<!-- 🔷 HOME -->
+<section id="home">
+    <div class="text-center mb-4">
+        <h1 class="fw-bold">AI-Based Fitness Level Predictor</h1>
+        <p class="text-muted">
+            Analyze your fitness level using AI-powered logic and health parameters
+        </p>
+    </div>
+
+    <!-- Carousel -->
+    <div id="fitnessCarousel" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="3000">
+        <div class="carousel-inner rounded shadow">
+            <div class="carousel-item active">
+                <img src="https://images.unsplash.com/photo-1549576490-b0b4831ef60a?auto=format&fit=crop&w=1200&q=80"
+                     class="d-block w-100" style="height:220px; object-fit:cover;">
+            </div>
+            <div class="carousel-item">
+                <img src="https://images.unsplash.com/photo-1508609349937-5ec4ae374ebf?auto=format&fit=crop&w=1200&q=80"
+                     class="d-block w-100" style="height:220px; object-fit:cover;">
+            </div>
+            <div class="carousel-item">
+                <img src="https://images.unsplash.com/photo-1514996937319-344454492b37?auto=format&fit=crop&w=1200&q=80"
+                     class="d-block w-100" style="height:220px; object-fit:cover;">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 🔷 HOW IT WORKS -->
+<section id="how">
+    <div class="card shadow p-4 mb-4">
+        <h4 class="text-center mb-3">How It Works</h4>
+        <ol>
+            <li>User enters basic health details</li>
+            <li>AI-based backend processes the data</li>
+            <li>Fitness level and suggestions are generated</li>
+        </ol>
+    </div>
+</section>
+
+<!-- 🔷 PREDICT FITNESS -->
+<section id="predict">
+    <div class="card shadow p-4 mb-4">
+        <h4 class="text-center mb-3">Predict Fitness</h4>
+        <p class="text-center text-muted">All fields are mandatory</p>
+
+        <form method="POST">
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <input name="name" pattern="[A-Za-z ]+"  title="Please enter letters only" class="form-control" placeholder="Name (ONLY ENTER LETTERS)" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <input name="age" type="number" min="1" class="form-control" placeholder="Age (eg. 19)" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <input name="height" type="number" min="50" max="250" class="form-control" placeholder="Height (cm) (eg. 175)" required >
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <input name="weight" type="number" min="10" max="300" class="form-control" placeholder="Weight (kg) (eg. 50)" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <input name="steps" type="number" min="0" class="form-control" placeholder="Daily Steps (eg. 1500)" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <input name="heart_rate" type="number" min="40" max="200" class="form-control" placeholder="Heart Rate (eg. 78)" required>
+                </div>
+
+            </div>
+
+            <div class="d-flex gap-2">
+                <button class="btn btn-primary w-100">Predict Fitness</button>
+                <button type="reset" class="btn btn-outline-secondary w-100">Reset</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- 🔷 RESULT -->
+<section id="result">
+    {% if result %}
+    <div id="result-section" class="card shadow p-4 mb-4">
+        <h4 class="text-center mb-3">Your Fitness Report</h4>
+
+        <p><strong>Name:</strong> {{ result.name }}</p>
+        <p><strong>BMI:</strong> {{ result.bmi }}</p>
+
+        <p><strong>Fitness Level:</strong>
+            <span class="badge 
+                {% if result.fitness == 'Low' %}bg-danger
+                {% elif result.fitness == 'Medium' %}bg-warning
+                {% else %}bg-success{% endif %}">
+                {{ result.fitness }}
+            </span>
+        </p>
+
+        <h5>AI-Based Suggestions</h5>
+        <ul>
+            {% for s in suggestions %}
+            <li>{{ s }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- 🔹 AUTO SCROLL FIX -->
+    <script>
+        document.getElementById("result-section").scrollIntoView({
+            behavior: "smooth"
+        });
+    </script>
+    {% endif %}
+</section>
+
+<!-- 🔷 DISCLAIMER -->
+<div class="text-center text-muted mb-4">
+    <small>
+        This tool provides general fitness insights and is not intended for medical diagnosis.
+    </small>
+</div>
+
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
 
